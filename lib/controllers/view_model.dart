@@ -96,3 +96,34 @@ class MovieViewModel extends ChangeNotifier {
     _error = '';
     _currentPage = 1;
     notifyListeners();
+
+    try {
+      switch (_selectedType) {
+        case ContentType.movies:
+          final result = await _movieService.getPopularMovies(_currentPage);
+          _movies = result['movies'];
+          _filteredMovies = _movies;
+          _totalPages = result['totalPages'];
+          _hasMoreContent = _currentPage < _totalPages;
+          break;
+        case ContentType.tvShows:
+          final result = await _movieService.getPopularTVShows(_currentPage);
+          _movies = result['movies'];
+          _filteredMovies = _movies;
+          _totalPages = result['totalPages'];
+          _hasMoreContent = _currentPage < _totalPages;
+          break;
+        case ContentType.reviews:
+          _reviews = _allSampleReviews.take(5).toList();
+          _filteredReviews = _reviews;
+          _hasMoreContent = _reviews.length < _allSampleReviews.length;
+          break;
+      }
+      _error = '';
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
