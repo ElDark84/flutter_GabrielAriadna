@@ -267,3 +267,52 @@ class _MovieListScreenState extends State<MovieListScreen> {
                         },
                       );
                     }
+
+                    return Column(
+                      children: [
+                        Expanded(child: contentList),
+                        if (movieViewModel.hasMoreContent)
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Theme.of(context).colorScheme.primary,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                elevation: 5,
+                              ),
+                              onPressed: movieViewModel.isLoading
+                                  ? null
+                                  : () => movieViewModel.loadMoreContent(),
+                              child: movieViewModel.isLoading
+                                  ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                ),
+                              )
+                                  : const Text(
+                                'Ver más',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
