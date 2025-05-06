@@ -61,3 +61,95 @@ class _MovieListScreenState extends State<MovieListScreen> {
     _searchController.dispose();
     super.dispose();
   }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Theme.of(context).colorScheme.background,
+              Theme.of(context).colorScheme.surface,
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 16.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surface,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 10,
+                        offset: const Offset(0, 5),
+                      ),
+                    ],
+                  ),
+                  child: TextField(
+                    controller: _searchController,
+                    style: const TextStyle(color: Colors.white),
+                    decoration: InputDecoration(
+                      hintText: 'Search...',
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                      prefixIcon: Icon(Icons.search, color: Colors.grey.shade400),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
+                        borderSide: BorderSide.none,
+                      ),
+                      filled: true,
+                      fillColor: Colors.transparent,
+                      suffixIcon: IconButton(
+                        icon: Icon(Icons.clear, color: Colors.grey.shade400),
+                        onPressed: () {
+                          _searchController.clear();
+                          context.read<MovieViewModel>().searchContent('');
+                        },
+                      ),
+                    ),
+                    onChanged: (value) {
+                      context.read<MovieViewModel>().searchContent(value);
+                    },
+                  ),
+                ),
+              ),
+              Consumer<MovieViewModel>(
+                builder: (context, movieViewModel, child) {
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Row(
+                      children: [
+                        _buildCategoryChip(
+                          context,
+                          'Películas',
+                          ContentType.movies,
+                          movieViewModel.selectedType,
+                        ),
+                        const SizedBox(width: 8),
+                        _buildCategoryChip(
+                          context,
+                          'Series',
+                          ContentType.tvShows,
+                          movieViewModel.selectedType,
+                        ),
+                        const SizedBox(width: 8),
+                        _buildCategoryChip(
+                          context,
+                          'Reviews',
+                          ContentType.reviews,
+                          movieViewModel.selectedType,
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
