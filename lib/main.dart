@@ -153,3 +153,17 @@ class _MovieListScreenState extends State<MovieListScreen> {
                   );
                 },
               ),
+              const SizedBox(height: 8),
+              Expanded(
+                child: Consumer<MovieViewModel>(
+                  builder: (context, movieViewModel, child) {
+                    if (movieViewModel.isLoading &&
+                        ((movieViewModel.selectedType == ContentType.reviews && movieViewModel.reviews.isEmpty) ||
+                            (movieViewModel.selectedType != ContentType.reviews && movieViewModel.movies.isEmpty))) {
+                      return const Center(
+                        child: SpinKitDoubleBounce(
+                          color: Colors.blue,
+                          size: 50.0,
+                        ),
+                      );
+                    }
