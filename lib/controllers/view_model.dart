@@ -223,4 +223,4 @@ class MovieViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
-} 
+}
