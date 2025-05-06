@@ -16,3 +16,19 @@ class MovieService {
           'Content-Type': 'application/json',
         },
       );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List<dynamic> results = data['results'];
+        return {
+          'movies': results.map((json) => Movie.fromJson(json)).toList(),
+          'totalPages': data['total_pages'],
+          'currentPage': data['page'],
+        };
+      } else {
+        throw Exception('Failed to load movies: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error connecting to the server: $e');
+    }
+  }
