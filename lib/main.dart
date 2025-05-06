@@ -316,3 +316,40 @@ class _MovieListScreenState extends State<MovieListScreen> {
       ),
     );
   }
+
+  Widget _buildCategoryChip(
+      BuildContext context,
+      String label,
+      ContentType type,
+      ContentType selectedType,
+      ) {
+    final isSelected = type == selectedType;
+    return FilterChip(
+      label: Text(
+        label,
+        style: TextStyle(
+          color: isSelected ? Colors.white : Colors.grey.shade400,
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+        ),
+      ),
+      selected: isSelected,
+      onSelected: (selected) {
+        if (selected) {
+          context.read<MovieViewModel>().setContentType(type);
+        }
+      },
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      selectedColor: Theme.of(context).colorScheme.primary,
+      checkmarkColor: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+        side: BorderSide(
+          color: isSelected
+              ? Theme.of(context).colorScheme.primary
+              : Colors.grey.shade700,
+        ),
+      ),
+    );
+  }
+}
