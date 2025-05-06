@@ -89,3 +89,10 @@ class MovieViewModel extends ChangeNotifier {
       createdAt: '2024-03-06',
     ),
   ];
+
+  // Methods
+  Future<void> loadContent() async {
+    _isLoading = true;
+    _error = '';
+    _currentPage = 1;
+    notifyListeners();
