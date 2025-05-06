@@ -127,3 +127,45 @@ class MovieViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> loadMoreContent() async {
+    if (!_hasMoreContent || _isLoading) return;
+
+    _isLoading = true;
+    _error = '';
+    notifyListeners();
+
+    try {
+      switch (_selectedType) {
+        case ContentType.movies:
+          final result = await _movieService.getPopularMovies(_currentPage + 1);
+          _movies.addAll(result['movies']);
+          _filteredMovies = _movies;
+          _currentPage = result['currentPage'];
+          _totalPages = result['totalPages'];
+          _hasMoreContent = _currentPage < _totalPages;
+          break;
+        case ContentType.tvShows:
+          final result = await _movieService.getPopularTVShows(_currentPage + 1);
+          _movies.addAll(result['movies']);
+          _filteredMovies = _movies;
+          _currentPage = result['currentPage'];
+          _totalPages = result['totalPages'];
+          _hasMoreContent = _currentPage < _totalPages;
+          break;
+        case ContentType.reviews:
+          final currentLength = _reviews.length;
+          final nextReviews = _allSampleReviews.skip(currentLength).take(5).toList();
+          _reviews.addAll(nextReviews);
+          _filteredReviews = _reviews;
+          _hasMoreContent = _reviews.length < _allSampleReviews.length;
+          break;
+      }
+      _error = '';
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
