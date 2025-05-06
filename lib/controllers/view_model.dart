@@ -169,3 +169,58 @@ class MovieViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  void setContentType(ContentType type) {
+    if (_selectedType != type) {
+      _selectedType = type;
+      loadContent();
+    }
+  }
+
+  Future<void> searchContent(String query) async {
+    if (query.isEmpty) {
+      if (_selectedType == ContentType.reviews) {
+        _filteredReviews = _reviews;
+      } else {
+        _filteredMovies = _movies;
+      }
+      notifyListeners();
+      return;
+    }
+
+    _isLoading = true;
+    _error = '';
+    _currentPage = 1;
+    notifyListeners();
+
+    try {
+      switch (_selectedType) {
+        case ContentType.movies:
+          final result = await _movieService.searchMovies(query, _currentPage);
+          _filteredMovies = result['movies'];
+          _totalPages = result['totalPages'];
+          _hasMoreContent = _currentPage < _totalPages;
+          break;
+        case ContentType.tvShows:
+          final result = await _movieService.searchTVShows(query, _currentPage);
+          _filteredMovies = result['movies'];
+          _totalPages = result['totalPages'];
+          _hasMoreContent = _currentPage < _totalPages;
+          break;
+        case ContentType.reviews:
+          _filteredReviews = _allSampleReviews.where((review) {
+            return review.content.toLowerCase().contains(query.toLowerCase()) ||
+                review.author.toLowerCase().contains(query.toLowerCase());
+          }).toList();
+          _hasMoreContent = false;
+          break;
+      }
+      _error = '';
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+} 
