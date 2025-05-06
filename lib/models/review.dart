@@ -19,4 +19,4 @@ class Review {
       createdAt: json['created_at'] ?? DateTime.now().toString(),
     );
   }
-} 
+}
