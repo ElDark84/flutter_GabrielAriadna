@@ -46,3 +46,18 @@ class MovieListScreen extends StatefulWidget {
   @override
   State<MovieListScreen> createState() => _MovieListScreenState();
 }
+
+class _MovieListScreenState extends State<MovieListScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() => context.read<MovieViewModel>().loadContent());
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
