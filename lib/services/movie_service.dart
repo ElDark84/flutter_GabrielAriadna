@@ -84,3 +84,30 @@ class MovieService {
       throw Exception('Error connecting to the server: $e');
     }
   }
+
+  Future<Map<String, dynamic>> searchTVShows(String query, int page) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/search/tv?query=$query&page=$page'),
+        headers: {
+          'Authorization': 'Bearer $_token',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List<dynamic> results = data['results'];
+        return {
+          'movies': results.map((json) => Movie.fromJson(json)).toList(),
+          'totalPages': data['total_pages'],
+          'currentPage': data['page'],
+        };
+      } else {
+        throw Exception('Failed to search TV shows: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error connecting to the server: $e');
+    }
+  }
+}
