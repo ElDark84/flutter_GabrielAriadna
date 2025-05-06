@@ -18,3 +18,19 @@ class Movie {
     this.name,
     this.firstAirDate,
   });
+
+  factory Movie.fromJson(Map<String, dynamic> json) {
+    // Determinar si es una película o una serie de TV
+    final bool isTVShow = json['name'] != null;
+
+    return Movie(
+      id: json['id'],
+      title: isTVShow ? json['name'] : json['title'],
+      overview: json['overview'],
+      posterPath: json['poster_path'],
+      voteAverage: (json['vote_average'] as num).toDouble(),
+      releaseDate: isTVShow ? json['first_air_date'] : json['release_date'],
+      name: json['name'],
+      firstAirDate: json['first_air_date'],
+    );
+  }
