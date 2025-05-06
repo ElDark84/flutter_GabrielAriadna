@@ -34,3 +34,9 @@ class Movie {
       firstAirDate: json['first_air_date'],
     );
   }
+
+  String get posterUrl {
+    if (posterPath == null) return '';
+    return 'https://image.tmdb.org/t/p/w500$posterPath';
+  }
+}
