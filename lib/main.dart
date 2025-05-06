@@ -206,3 +206,64 @@ class _MovieListScreenState extends State<MovieListScreen> {
                         ),
                       );
                     }
+
+                    Widget contentList;
+                    if (movieViewModel.selectedType == ContentType.reviews) {
+                      if (movieViewModel.reviews.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search_off,
+                                size: 60,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'No reviews found',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey.shade400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      contentList = ListView.builder(
+                        itemCount: movieViewModel.reviews.length,
+                        itemBuilder: (context, index) {
+                          return ReviewCard(review: movieViewModel.reviews[index]);
+                        },
+                      );
+                    } else {
+                      if (movieViewModel.movies.isEmpty) {
+                        return Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.search_off,
+                                size: 60,
+                                color: Colors.grey.shade400,
+                              ),
+                              const SizedBox(height: 16),
+                              Text(
+                                'No content found',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.grey.shade400,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      contentList = ListView.builder(
+                        itemCount: movieViewModel.movies.length,
+                        itemBuilder: (context, index) {
+                          return MovieCard(movie: movieViewModel.movies[index]);
+                        },
+                      );
+                    }
