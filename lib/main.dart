@@ -39,3 +39,10 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+class MovieListScreen extends StatefulWidget {
+  const MovieListScreen({super.key});
+
+  @override
+  State<MovieListScreen> createState() => _MovieListScreenState();
+}
