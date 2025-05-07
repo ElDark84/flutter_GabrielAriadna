@@ -10,86 +10,109 @@ class MovieCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (_) => MovieDetailScreen(movie: movie)),
-      ),
-      child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        color: Theme.of(context).colorScheme.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        elevation: 5,
-        child: Column(
-          children: [
-            if (movie.posterPath != null)
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-                child: Image.network(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => MovieDetailScreen(movie: movie),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
+            ),
+          ],
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: Stack(
+            children: [
+              if (movie.posterPath != null)
+                Image.network(
                   movie.posterUrl,
-                  height: 250,
+                  height: 300,
                   width: double.infinity,
                   fit: BoxFit.cover,
-                ),
-              ),
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    movie.title,
-                    style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      const Icon(Icons.star, color: Colors.amber, size: 20),
-                      const SizedBox(width: 4),
-                      Text(
-                        movie.voteAverage.toStringAsFixed(1),
-                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                  errorBuilder: (context, error, stackTrace) {
+                    return Container(
+                      height: 300,
+                      color: Colors.grey[800],
+                      child: const Icon(
+                        Icons.error,
+                        size: 50,
+                        color: Colors.white,
                       ),
-                      const SizedBox(width: 12),
+                    );
+                  },
+                )
+              else
+                Container(
+                  height: 300,
+                  color: Colors.grey[800],
+                  child: const Icon(
+                    Icons.movie,
+                    size: 50,
+                    color: Colors.white,
+                  ),
+                ),
+              Positioned(
+                bottom: 0,
+                left: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.bottomCenter,
+                      end: Alignment.topCenter,
+                      colors: [
+                        Colors.black.withOpacity(0.8),
+                        Colors.transparent,
+                      ],
+                    ),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        movie.releaseDate,
-                        style: const TextStyle(color: Colors.grey, fontSize: 14),
+                        movie.title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            movie.voteAverage.toStringAsFixed(1),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    movie.overview.isNotEmpty
-                        ? (movie.overview.length > 120
-                            ? '${movie.overview.substring(0, 120)}...'
-                            : movie.overview)
-                        : 'Sin descripción.',
-                    style: const TextStyle(color: Colors.white70),
-                  ),
-                  const SizedBox(height: 12),
-                  if (movie.cast.isNotEmpty)
-                    Wrap(
-                      spacing: 8,
-                      runSpacing: 4,
-                      children: movie.cast.take(3).map((actor) {
-                        return Chip(
-                          label: Text(actor),
-                          backgroundColor: Colors.blueGrey,
-                          labelStyle: const TextStyle(color: Colors.white),
-                        );
-                      }).toList(),
-                    ),
-                  if (movie.budget != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Text(
-                        'Presupuesto: \$${movie.budget!.toString().replaceAllMapped(RegExp(r'\B(?=(\d{3})+(?!\d))'), (match) => ",")}',
-                        style: const TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

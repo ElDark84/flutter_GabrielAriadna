@@ -5,7 +5,6 @@ import '../controllers/view_model.dart';
 import '../widgets/movie_card.dart';
 import '../widgets/review_card.dart';
 
-
 class MovieListScreen extends StatefulWidget {
   const MovieListScreen({super.key});
 
@@ -30,27 +29,30 @@ class _MovieListScreenState extends State<MovieListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Theme.of(context).colorScheme.background,
-              Theme.of(context).colorScheme.surface,
-            ],
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(), // Oculta el teclado
+      child: Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Theme.of(context).colorScheme.background,
+                Theme.of(context).colorScheme.surface,
+              ],
+            ),
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              _buildSearchBar(),
-              _buildCategoryChips(),
-              const SizedBox(height: 8),
-              _buildContentList(),
-            ],
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              children: [
+                _buildSearchBar(),
+                _buildCategoryChips(),
+                const SizedBox(height: 8),
+                _buildContentList(),
+              ],
+            ),
           ),
         ),
       ),
@@ -158,7 +160,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
         builder: (context, movieViewModel, child) {
           if (movieViewModel.isLoading &&
               ((movieViewModel.selectedType == ContentType.reviews && movieViewModel.reviews.isEmpty) ||
-               (movieViewModel.selectedType != ContentType.reviews && movieViewModel.movies.isEmpty))) {
+                  (movieViewModel.selectedType != ContentType.reviews && movieViewModel.movies.isEmpty))) {
             return const Center(
               child: SpinKitDoubleBounce(color: Colors.blue, size: 50.0),
             );
@@ -239,11 +241,27 @@ class _MovieListScreenState extends State<MovieListScreen> {
     return Column(
       children: [
         Expanded(
-          child: ListView.builder(
-            itemCount: movieViewModel.movies.length,
-            itemBuilder: (context, index) {
-              return MovieCard(movie: movieViewModel.movies[index]);
+          child: GestureDetector(
+            onDoubleTap: () {
+              context.read<MovieViewModel>().loadContent();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Contenido recargado')),
+              );
             },
+            child: ListView.builder(
+              itemCount: movieViewModel.movies.length,
+              itemBuilder: (context, index) {
+                final movie = movieViewModel.movies[index];
+                return GestureDetector(
+                  onLongPress: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Detalles de: ${movie.title}')),
+                    );
+                  },
+                  child: MovieCard(movie: movie),
+                );
+              },
+            ),
           ),
         ),
         if (movieViewModel.hasMoreContent)
