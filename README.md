@@ -1,16 +1,41 @@
-# casopractica_gabrielariadna
+# 🎬 casopractica_gabrielariadna
 
-A new Flutter project.
+Aplicación Flutter desarrollada como caso práctico por Ariadna Gabriel.  
+Permite explorar películas, series y reseñas con una interfaz moderna, navegación intuitiva y gestos táctiles personalizados.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## 🚀 Funcionalidades
 
-A few resources to get you started if this is your first Flutter project:
+- 🔍 Búsqueda en tiempo real.
+- 🎞️ Visualización de películas y series con carátulas.
+- 📝 Listado de reseñas en scroll horizontal.
+- ⭐ Valoración por estrellas.
+- 📄 Pantalla de detalle completa por ítem.
+- 📱 Interfaz responsive con soporte para:
+  - Tap para abrir detalle.
+  - Doble tap para recargar contenido.
+  - Long press para mostrar detalles rápidos.
+  - Ocultado automático del teclado al tocar fuera.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🧱 Estructura del proyecto
+
+```plaintext
+lib/
+├── controllers/       # ViewModels con lógica de negocio
+├── models/            # Clases de datos como Movie
+├── views/             # Pantallas principales y de detalle
+├── widgets/           # Componentes reutilizables (cards, chips, etc.)
+└── main.dart          # Punto de entrada de la app
+🛠️ Tecnologías y paquetes utilizados
+Flutter
+
+provider - Gestión de estado
+
+flutter_spinkit - Indicadores de carga animados
+
+http - (opcional) para consumir APIs REST
+
+Material 3 - Estilo visual moderno
