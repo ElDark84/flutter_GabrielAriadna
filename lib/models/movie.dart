@@ -5,8 +5,12 @@ class Movie {
   final String? posterPath;
   final double voteAverage;
   final String releaseDate;
-  final String? name; // Para series de TV
-  final String? firstAirDate; // Para series de TV
+  final String? name;
+  final String? firstAirDate;
+
+  // Nuevos campos
+  final List<String> cast;
+  final int? budget;
 
   Movie({
     required this.id,
@@ -17,10 +21,11 @@ class Movie {
     required this.releaseDate,
     this.name,
     this.firstAirDate,
+    this.cast = const [],
+    this.budget,
   });
 
   factory Movie.fromJson(Map<String, dynamic> json) {
-    // Determinar si es una película o una serie de TV
     final bool isTVShow = json['name'] != null;
 
     return Movie(
@@ -32,6 +37,10 @@ class Movie {
       releaseDate: isTVShow ? json['first_air_date'] : json['release_date'],
       name: json['name'],
       firstAirDate: json['first_air_date'],
+      cast: json['cast'] != null
+          ? List<String>.from(json['cast'].map((c) => c['name']))
+          : [],
+      budget: json['budget'],
     );
   }
 
