@@ -1,0 +1,2 @@
+C:/Users/aripa/DAM2/PracticaFlutter/flutter_application_gabriel_ariadna/android/app/.cxx/Debug/1o4a445e/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/aripa/DAM2/PracticaFlutter/flutter_application_gabriel_ariadna/android/app/.cxx/Debug/1o4a445e/armeabi-v7a/CMakeFiles/rebuild_cache.dir
