@@ -92,7 +92,7 @@ class MovieDetailScreen extends StatelessWidget {
             Center(
               child: ElevatedButton.icon(
                 onPressed: () {
-                  // Aquí podrías abrir un tráiler o compartir
+                  // TODO: Implementar la funcionalidad del tráiler
                 },
                 icon: const Icon(Icons.play_circle_fill),
                 label: const Text('Ver tráiler'),
