@@ -135,17 +135,17 @@ class _MovieListScreenState extends State<MovieListScreen> {
     return Consumer<MovieViewModel>(
       builder: (context, movieViewModel, child) {
         return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,  // Enable horizontal scrolling
+          scrollDirection: Axis.horizontal,  // Habilita el desplazamiento horizontal
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              // Movie category chip
+              // Chip de categoría de películas
               _buildCategoryChip('Películas', ContentType.movies, movieViewModel.selectedType),
               const SizedBox(width: 8),
-              // TV Shows category chip
+              // Chip de categoría de series
               _buildCategoryChip('Series', ContentType.tvShows, movieViewModel.selectedType),
               const SizedBox(width: 8),
-              // Reviews category chip
+              // Chip de categoría de reseñas
               _buildCategoryChip('Reseñas', ContentType.reviews, movieViewModel.selectedType),
             ],
           ),
@@ -154,35 +154,35 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  /// Builds an individual category filter chip
-  /// Handles selection state and visual feedback
+  /// Construye un chip individual de filtro de categoría
+  /// Maneja el estado de selección y la retroalimentación visual
   Widget _buildCategoryChip(String label, ContentType type, ContentType selectedType) {
-    final isSelected = type == selectedType;  // Check if this category is selected
+    final isSelected = type == selectedType;  // Verifica si esta categoría está seleccionada
     return FilterChip(
       label: Text(
         label,
         style: TextStyle(
-          color: isSelected ? Colors.white : Colors.grey.shade400,  // Text color based on selection
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,  // Font weight based on selection
+          color: isSelected ? Colors.white : Colors.grey.shade400,  // Color del texto según la selección
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,  // Peso de la fuente según la selección
         ),
       ),
       selected: isSelected,
       onSelected: (selected) {
         if (selected) {
-          // Update selected content type
+          // Actualizar el tipo de contenido seleccionado
           context.read<MovieViewModel>().setContentType(type);
         }
       },
-      backgroundColor: Theme.of(context).colorScheme.surface,  // Background color
-      selectedColor: Theme.of(context).colorScheme.primary,  // Selected state color
-      checkmarkColor: Colors.white,  // Checkmark color
+      backgroundColor: Theme.of(context).colorScheme.surface,  // Color de fondo
+      selectedColor: Theme.of(context).colorScheme.primary,  // Color del estado seleccionado
+      checkmarkColor: Colors.white,  // Color de la marca de verificación
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
-              : Colors.grey.shade700,  // Border color based on selection
+              : Colors.grey.shade700,  // Color del borde según la selección
         ),
       ),
     );
@@ -194,22 +194,22 @@ class _MovieListScreenState extends State<MovieListScreen> {
     return Expanded(
       child: Consumer<MovieViewModel>(
         builder: (context, movieViewModel, child) {
-          // Show loading indicator while fetching initial data
+          // Mostrar indicador de carga mientras se obtienen los datos iniciales
           if (movieViewModel.isLoading &&
               ((movieViewModel.selectedType == ContentType.reviews && movieViewModel.reviews.isEmpty) ||
                   (movieViewModel.selectedType != ContentType.reviews && movieViewModel.movies.isEmpty))) {
             return const Center(
-              child: SpinKitDoubleBounce(color: Colors.blue, size: 50.0),  // Loading animation
+              child: SpinKitDoubleBounce(color: Colors.blue, size: 50.0),  // Animación de carga
             );
           }
 
-          // Show error message if something went wrong
+          // Mostrar mensaje de error si algo salió mal
           if (movieViewModel.error.isNotEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline, color: Colors.red, size: 60),  // Error icon
+                  const Icon(Icons.error_outline, color: Colors.red, size: 60),  // Icono de error
                   const SizedBox(height: 16),
                   Text(
                     movieViewModel.error,
@@ -217,7 +217,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                  // Retry button
+                  // Botón de reintentar
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
@@ -228,24 +228,24 @@ class _MovieListScreenState extends State<MovieListScreen> {
                       ),
                     ),
                     onPressed: () => movieViewModel.loadContent(),
-                    child: const Text('Retry'),
+                    child: const Text('Reintentar'),
                   ),
                 ],
               ),
             );
           }
 
-          // Show appropriate list based on selected content type
+          // Mostrar lista apropiada según el tipo de contenido seleccionado
           if (movieViewModel.selectedType == ContentType.reviews) {
             if (movieViewModel.reviews.isEmpty) {
-              return _buildEmptyMessage('No reviews found');  // Empty reviews message
+              return _buildEmptyMessage('No se encontraron reseñas');  // Mensaje de reseñas vacías
             }
-            return _buildReviewList(movieViewModel);  // Reviews list
+            return _buildReviewList(movieViewModel);  // Lista de reseñas
           } else {
             if (movieViewModel.movies.isEmpty) {
-              return _buildEmptyMessage('No content found');  // Empty content message
+              return _buildEmptyMessage('No se encontró contenido');  // Mensaje de contenido vacío
             }
-            return _buildMovieList(movieViewModel);  // Movies/TV shows list
+            return _buildMovieList(movieViewModel);  // Lista de películas/series
           }
         },
       ),
@@ -286,7 +286,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
       children: [
         Expanded(
           child: GestureDetector(
-            // Reload content on double tap
+            // Recargar contenido al hacer doble tap
             onDoubleTap: () {
               context.read<MovieViewModel>().loadContent();
               ScaffoldMessenger.of(context).showSnackBar(
@@ -298,7 +298,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
               itemBuilder: (context, index) {
                 final movie = movieViewModel.movies[index];
                 return GestureDetector(
-                  // Show movie details on long press
+                  // Mostrar detalles de la película al mantener presionado
                   onLongPress: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Detalles de: ${movie.title}')),
@@ -310,7 +310,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
             ),
           ),
         ),
-        // Load more button when more content is available
+        // Botón de cargar más cuando hay más contenido disponible
         if (movieViewModel.hasMoreContent)
           Padding(
             padding: const EdgeInsets.all(16.0),

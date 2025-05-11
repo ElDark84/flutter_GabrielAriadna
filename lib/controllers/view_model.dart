@@ -97,7 +97,7 @@ class MovieViewModel extends ChangeNotifier {
     try {
       switch (_selectedType) {
         case ContentType.movies:
-          // Load popular movies
+          // Cargar películas populares
           final result = await _movieService.getPopularMovies(_currentPage);
           _movies = result['movies'];
           _filteredMovies = _movies;
@@ -105,7 +105,7 @@ class MovieViewModel extends ChangeNotifier {
           _hasMoreContent = _currentPage < _totalPages;
           break;
         case ContentType.tvShows:
-          // Load popular TV shows
+          // Cargar series de TV populares
           final result = await _movieService.getPopularTVShows(_currentPage);
           _movies = result['movies'];
           _filteredMovies = _movies;
@@ -113,7 +113,7 @@ class MovieViewModel extends ChangeNotifier {
           _hasMoreContent = _currentPage < _totalPages;
           break;
         case ContentType.reviews:
-          // Load initial batch of reviews
+          // Cargar lote inicial de reseñas
           _reviews = _allSampleReviews.take(5).toList();
           _filteredReviews = _reviews;
           _hasMoreContent = _reviews.length < _allSampleReviews.length;
@@ -139,7 +139,7 @@ class MovieViewModel extends ChangeNotifier {
     try {
       switch (_selectedType) {
         case ContentType.movies:
-          // Load next page of movies
+          // Cargar siguiente página de películas
           final result = await _movieService.getPopularMovies(_currentPage + 1);
           _movies.addAll(result['movies']);
           _filteredMovies = _movies;
@@ -148,7 +148,7 @@ class MovieViewModel extends ChangeNotifier {
           _hasMoreContent = _currentPage < _totalPages;
           break;
         case ContentType.tvShows:
-          // Load next page of TV shows
+          // Cargar siguiente página de series
           final result = await _movieService.getPopularTVShows(_currentPage + 1);
           _movies.addAll(result['movies']);
           _filteredMovies = _movies;
@@ -157,7 +157,7 @@ class MovieViewModel extends ChangeNotifier {
           _hasMoreContent = _currentPage < _totalPages;
           break;
         case ContentType.reviews:
-          // Load next batch of reviews
+          // Cargar siguiente lote de reseñas
           final currentLength = _reviews.length;
           final nextReviews = _allSampleReviews.skip(currentLength).take(5).toList();
           _reviews.addAll(nextReviews);
@@ -186,7 +186,7 @@ class MovieViewModel extends ChangeNotifier {
   /// Maneja diferentes tipos de contenido y estados de búsqueda
   Future<void> searchContent(String query) async {
     if (query.isEmpty) {
-      // Reset to full list if search is cleared
+      // Restablecer a la lista completa si se limpia la búsqueda
       if (_selectedType == ContentType.reviews) {
         _filteredReviews = _reviews;
       } else {
@@ -204,21 +204,21 @@ class MovieViewModel extends ChangeNotifier {
     try {
       switch (_selectedType) {
         case ContentType.movies:
-          // Search movies through API
+          // Buscar películas a través de la API
           final result = await _movieService.searchMovies(query, _currentPage);
           _filteredMovies = result['movies'];
           _totalPages = result['totalPages'];
           _hasMoreContent = _currentPage < _totalPages;
           break;
         case ContentType.tvShows:
-          // Search TV shows through API
+          // Buscar series a través de la API
           final result = await _movieService.searchTVShows(query, _currentPage);
           _filteredMovies = result['movies'];
           _totalPages = result['totalPages'];
           _hasMoreContent = _currentPage < _totalPages;
           break;
         case ContentType.reviews:
-          // Filter reviews locally
+          // Filtrar reseñas localmente
           _filteredReviews = _allSampleReviews.where((review) {
             return review.content.toLowerCase().contains(query.toLowerCase()) ||
                 review.author.toLowerCase().contains(query.toLowerCase());
