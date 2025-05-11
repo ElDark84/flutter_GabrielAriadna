@@ -1,3 +1,10 @@
+/// Main screen that displays a list of movies, TV shows, or reviews
+/// Features include:
+/// - Search functionality
+/// - Category filtering (Movies, TV Shows, Reviews)
+/// - Infinite scrolling
+/// - Pull to refresh
+/// - Error handling and loading states
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -5,7 +12,8 @@ import '../controllers/view_model.dart';
 import '../widgets/movie_card.dart';
 import '../widgets/review_card.dart';
 
-// Widget principal que muestra la lista de películas y series
+/// Main widget that displays the list of movies and TV shows
+/// Uses Provider for state management and handles user interactions
 class MovieListScreen extends StatefulWidget {
   const MovieListScreen({super.key});
 
@@ -13,36 +21,37 @@ class MovieListScreen extends StatefulWidget {
   State<MovieListScreen> createState() => _MovieListScreenState();
 }
 
-// Estado del widget MovieListScreen
+/// State class for MovieListScreen
+/// Manages the search controller and UI state
 class _MovieListScreenState extends State<MovieListScreen> {
-  // Controlador para el campo de búsqueda
+  /// Controller for the search text field
   final TextEditingController _searchController = TextEditingController();
 
   @override
-  // Método que se ejecuta cuando el widget se inicializa
+  /// Initialize the screen and load initial content
   void initState() {
     super.initState();
-    // Carga el contenido inicial de manera asíncrona
+    // Load initial content asynchronously
     Future.microtask(() => context.read<MovieViewModel>().loadContent());
   }
 
   @override
-  // Método que se ejecuta cuando el widget se destruye
+  /// Clean up resources when the widget is disposed
   void dispose() {
-    // Libera los recursos del controlador de texto
     _searchController.dispose();
     super.dispose();
   }
 
   @override
-  // Método que construye la interfaz de usuario
+  /// Build the main screen layout
+  /// Includes search bar, category filters, and content list
   Widget build(BuildContext context) {
     return GestureDetector(
-      // Oculta el teclado cuando se toca fuera del campo de búsqueda
+      // Dismiss keyboard when tapping outside search field
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: Container(
-          // Fondo con gradiente
+          // Background gradient for visual appeal
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -53,15 +62,15 @@ class _MovieListScreenState extends State<MovieListScreen> {
               ],
             ),
           ),
-          // Contenido principal con padding
+          // Main content with padding
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
-                _buildSearchBar(),  // Barra de búsqueda
-                _buildCategoryChips(),  // Chips de categorías
-                const SizedBox(height: 8),  // Espaciado
-                _buildContentList(),  // Lista de contenido
+                _buildSearchBar(),  // Search input field
+                _buildCategoryChips(),  // Category filter chips
+                const SizedBox(height: 8),  // Spacing
+                _buildContentList(),  // Main content list
               ],
             ),
           ),
@@ -70,12 +79,13 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  // Widget que construye la barra de búsqueda
+  /// Builds the search bar widget with clear button
+  /// Handles search input and updates the view model
   Widget _buildSearchBar() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 16.0),
       child: Container(
-        // Decoración de la barra de búsqueda
+        // Search bar container styling
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(15),
@@ -87,21 +97,21 @@ class _MovieListScreenState extends State<MovieListScreen> {
             ),
           ],
         ),
-        // Campo de texto para búsqueda
+        // Search text field
         child: TextField(
           controller: _searchController,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
-            hintText: 'Search...',  // Texto de sugerencia
+            hintText: 'Search...',  // Placeholder text
             hintStyle: TextStyle(color: Colors.grey.shade400),
-            prefixIcon: Icon(Icons.search, color: Colors.grey.shade400),  // Icono de búsqueda
+            prefixIcon: Icon(Icons.search, color: Colors.grey.shade400),  // Search icon
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide.none,
             ),
             filled: true,
             fillColor: Colors.transparent,
-            // Botón para limpiar la búsqueda
+            // Clear search button
             suffixIcon: IconButton(
               icon: Icon(Icons.clear, color: Colors.grey.shade400),
               onPressed: () {
@@ -110,7 +120,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
               },
             ),
           ),
-          // Actualiza la búsqueda cuando el texto cambia
+          // Update search results as user types
           onChanged: (value) {
             context.read<MovieViewModel>().searchContent(value);
           },
@@ -119,22 +129,23 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  // Widget que construye los chips de categorías (Películas, Series, Reviews)
+  /// Builds the horizontal scrollable category filter chips
+  /// Allows switching between Movies, TV Shows, and Reviews
   Widget _buildCategoryChips() {
     return Consumer<MovieViewModel>(
       builder: (context, movieViewModel, child) {
         return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,  // Permite scroll horizontal
+          scrollDirection: Axis.horizontal,  // Enable horizontal scrolling
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              // Chip para filtrar películas
+              // Movie category chip
               _buildCategoryChip('Películas', ContentType.movies, movieViewModel.selectedType),
               const SizedBox(width: 8),
-              // Chip para filtrar series
+              // TV Shows category chip
               _buildCategoryChip('Series', ContentType.tvShows, movieViewModel.selectedType),
               const SizedBox(width: 8),
-              // Chip para filtrar reviews
+              // Reviews category chip
               _buildCategoryChip('Reviews', ContentType.reviews, movieViewModel.selectedType),
             ],
           ),
@@ -143,60 +154,62 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  // Widget que construye un chip de categoría individual
+  /// Builds an individual category filter chip
+  /// Handles selection state and visual feedback
   Widget _buildCategoryChip(String label, ContentType type, ContentType selectedType) {
-    final isSelected = type == selectedType;  // Determina si el chip está seleccionado
+    final isSelected = type == selectedType;  // Check if this category is selected
     return FilterChip(
       label: Text(
         label,
         style: TextStyle(
-          color: isSelected ? Colors.white : Colors.grey.shade400,  // Color del texto según selección
-          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,  // Peso de la fuente según selección
+          color: isSelected ? Colors.white : Colors.grey.shade400,  // Text color based on selection
+          fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,  // Font weight based on selection
         ),
       ),
       selected: isSelected,
       onSelected: (selected) {
         if (selected) {
-          // Actualiza el tipo de contenido seleccionado
+          // Update selected content type
           context.read<MovieViewModel>().setContentType(type);
         }
       },
-      backgroundColor: Theme.of(context).colorScheme.surface,  // Color de fondo
-      selectedColor: Theme.of(context).colorScheme.primary,  // Color cuando está seleccionado
-      checkmarkColor: Colors.white,  // Color del checkmark
+      backgroundColor: Theme.of(context).colorScheme.surface,  // Background color
+      selectedColor: Theme.of(context).colorScheme.primary,  // Selected state color
+      checkmarkColor: Colors.white,  // Checkmark color
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
           color: isSelected
               ? Theme.of(context).colorScheme.primary
-              : Colors.grey.shade700,  // Color del borde según selección
+              : Colors.grey.shade700,  // Border color based on selection
         ),
       ),
     );
   }
 
-  // Widget que construye la lista de contenido (películas, series o reviews)
+  /// Builds the main content list (movies, TV shows, or reviews)
+  /// Handles loading states, errors, and empty states
   Widget _buildContentList() {
     return Expanded(
       child: Consumer<MovieViewModel>(
         builder: (context, movieViewModel, child) {
-          // Muestra un indicador de carga mientras se obtienen los datos
+          // Show loading indicator while fetching initial data
           if (movieViewModel.isLoading &&
               ((movieViewModel.selectedType == ContentType.reviews && movieViewModel.reviews.isEmpty) ||
                   (movieViewModel.selectedType != ContentType.reviews && movieViewModel.movies.isEmpty))) {
             return const Center(
-              child: SpinKitDoubleBounce(color: Colors.blue, size: 50.0),  // Animación de carga
+              child: SpinKitDoubleBounce(color: Colors.blue, size: 50.0),  // Loading animation
             );
           }
 
-          // Muestra un mensaje de error si algo salió mal
+          // Show error message if something went wrong
           if (movieViewModel.error.isNotEmpty) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.error_outline, color: Colors.red, size: 60),  // Icono de error
+                  const Icon(Icons.error_outline, color: Colors.red, size: 60),  // Error icon
                   const SizedBox(height: 16),
                   Text(
                     movieViewModel.error,
@@ -204,7 +217,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                  // Botón para reintentar la carga
+                  // Retry button
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.red,
@@ -222,30 +235,30 @@ class _MovieListScreenState extends State<MovieListScreen> {
             );
           }
 
-          // Muestra la lista de reviews o películas según el tipo seleccionado
+          // Show appropriate list based on selected content type
           if (movieViewModel.selectedType == ContentType.reviews) {
             if (movieViewModel.reviews.isEmpty) {
-              return _buildEmptyMessage('No reviews found');  // Mensaje si no hay reviews
+              return _buildEmptyMessage('No reviews found');  // Empty reviews message
             }
-            return _buildReviewList(movieViewModel);  // Lista de reviews
+            return _buildReviewList(movieViewModel);  // Reviews list
           } else {
             if (movieViewModel.movies.isEmpty) {
-              return _buildEmptyMessage('No content found');  // Mensaje si no hay contenido
+              return _buildEmptyMessage('No content found');  // Empty content message
             }
-            return _buildMovieList(movieViewModel);  // Lista de películas/series
+            return _buildMovieList(movieViewModel);  // Movies/TV shows list
           }
         },
       ),
     );
   }
 
-  // Widget que muestra un mensaje cuando no hay contenido
+  /// Builds a message shown when no content is available
   Widget _buildEmptyMessage(String message) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.search_off, size: 60, color: Colors.grey.shade400),  // Icono de búsqueda sin resultados
+          Icon(Icons.search_off, size: 60, color: Colors.grey.shade400),  // No results icon
           const SizedBox(height: 16),
           Text(
             message,
@@ -256,23 +269,24 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  // Widget que construye la lista de reviews
+  /// Builds the list of reviews
   Widget _buildReviewList(MovieViewModel movieViewModel) {
     return ListView.builder(
       itemCount: movieViewModel.reviews.length,
       itemBuilder: (context, index) {
-        return ReviewCard(review: movieViewModel.reviews[index]);  // Tarjeta de review individual
+        return ReviewCard(review: movieViewModel.reviews[index]);  // Individual review card
       },
     );
   }
 
-  // Widget que construye la lista de películas/series
+  /// Builds the list of movies or TV shows
+  /// Includes infinite scrolling and pull-to-refresh functionality
   Widget _buildMovieList(MovieViewModel movieViewModel) {
     return Column(
       children: [
         Expanded(
           child: GestureDetector(
-            // Permite recargar el contenido con doble tap
+            // Reload content on double tap
             onDoubleTap: () {
               context.read<MovieViewModel>().loadContent();
               ScaffoldMessenger.of(context).showSnackBar(
@@ -284,6 +298,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
               itemBuilder: (context, index) {
                 final movie = movieViewModel.movies[index];
                 return GestureDetector(
+                  // Show movie details on long press
                   onLongPress: () {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Detalles de: ${movie.title}')),
@@ -295,6 +310,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
             ),
           ),
         ),
+        // Load more button when more content is available
         if (movieViewModel.hasMoreContent)
           Padding(
             padding: const EdgeInsets.all(16.0),
