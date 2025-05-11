@@ -1,3 +1,8 @@
+import 'package:flutter/foundation.dart';
+import '../models/movie.dart';
+import '../models/review.dart';
+import '../services/movie_service.dart';
+
 /// Enum defining the types of content that can be displayed
 /// Used to switch between different content views
 enum ContentType { movies, tvShows, reviews }
@@ -9,11 +14,6 @@ enum ContentType { movies, tvShows, reviews }
 /// - Content type switching
 /// - Error handling
 /// - State management using ChangeNotifier
-import 'package:flutter/foundation.dart';
-import '../models/movie.dart';
-import '../models/review.dart';
-import '../services/movie_service.dart';
-
 class MovieViewModel extends ChangeNotifier {
   /// Service for making API calls to fetch movie data
   final MovieService _movieService = MovieService();
