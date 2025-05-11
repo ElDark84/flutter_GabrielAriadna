@@ -32,10 +32,10 @@ class MovieService {
           'currentPage': data['page'],  // Página actual
         };
       } else {
-        throw Exception('Failed to load movies: ${response.statusCode}');  // Lanza error si la petición falló
+        throw Exception('Error al cargar películas: ${response.statusCode}');  // Lanza error si la petición falló
       }
     } catch (e) {
-      throw Exception('Error connecting to the server: $e');  // Lanza error si hay problemas de conexión
+      throw Exception('Error de conexión al servidor: $e');  // Lanza error si hay problemas de conexión
     }
   }
 
@@ -60,10 +60,10 @@ class MovieService {
           'currentPage': data['page'],  // Página actual
         };
       } else {
-        throw Exception('Failed to load TV shows: ${response.statusCode}');  // Lanza error si la petición falló
+        throw Exception('Error al cargar series: ${response.statusCode}');  // Lanza error si la petición falló
       }
     } catch (e) {
-      throw Exception('Error connecting to the server: $e');  // Lanza error si hay problemas de conexión
+      throw Exception('Error de conexión al servidor: $e');  // Lanza error si hay problemas de conexión
     }
   }
 
@@ -88,10 +88,10 @@ class MovieService {
           'currentPage': data['page'],  // Página actual
         };
       } else {
-        throw Exception('Failed to search movies: ${response.statusCode}');  // Lanza error si la petición falló
+        throw Exception('Error al buscar películas: ${response.statusCode}');  // Lanza error si la petición falló
       }
     } catch (e) {
-      throw Exception('Error connecting to the server: $e');  // Lanza error si hay problemas de conexión
+      throw Exception('Error de conexión al servidor: $e');  // Lanza error si hay problemas de conexión
     }
   }
 
@@ -116,10 +116,10 @@ class MovieService {
           'currentPage': data['page'],  // Página actual
         };
       } else {
-        throw Exception('Failed to search TV shows: ${response.statusCode}');  // Lanza error si la petición falló
+        throw Exception('Error al buscar series: ${response.statusCode}');  // Lanza error si la petición falló
       }
     } catch (e) {
-      throw Exception('Error connecting to the server: $e');  // Lanza error si hay problemas de conexión
+      throw Exception('Error de conexión al servidor: $e');  // Lanza error si hay problemas de conexión
     }
   }
 }

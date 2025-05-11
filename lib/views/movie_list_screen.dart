@@ -1,10 +1,10 @@
-/// Main screen that displays a list of movies, TV shows, or reviews
-/// Features include:
-/// - Search functionality
-/// - Category filtering (Movies, TV Shows, Reviews)
-/// - Infinite scrolling
-/// - Pull to refresh
-/// - Error handling and loading states
+/// Pantalla principal que muestra una lista de películas, series de TV o reseñas
+/// Características incluyen:
+/// - Funcionalidad de búsqueda
+/// - Filtrado por categoría (Películas, Series de TV, Reseñas)
+/// - Desplazamiento infinito
+/// - Actualización mediante arrastre
+/// - Manejo de errores y estados de carga
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -12,8 +12,8 @@ import '../controllers/view_model.dart';
 import '../widgets/movie_card.dart';
 import '../widgets/review_card.dart';
 
-/// Main widget that displays the list of movies and TV shows
-/// Uses Provider for state management and handles user interactions
+/// Widget principal que muestra la lista de películas y series de TV
+/// Utiliza Provider para la gestión de estado y maneja las interacciones del usuario
 class MovieListScreen extends StatefulWidget {
   const MovieListScreen({super.key});
 
@@ -21,37 +21,37 @@ class MovieListScreen extends StatefulWidget {
   State<MovieListScreen> createState() => _MovieListScreenState();
 }
 
-/// State class for MovieListScreen
-/// Manages the search controller and UI state
+/// Clase de estado para MovieListScreen
+/// Gestiona el controlador de búsqueda y el estado de la UI
 class _MovieListScreenState extends State<MovieListScreen> {
-  /// Controller for the search text field
+  /// Controlador para el campo de texto de búsqueda
   final TextEditingController _searchController = TextEditingController();
 
   @override
-  /// Initialize the screen and load initial content
+  /// Inicializa la pantalla y carga el contenido inicial
   void initState() {
     super.initState();
-    // Load initial content asynchronously
+    // Carga el contenido inicial de forma asíncrona
     Future.microtask(() => context.read<MovieViewModel>().loadContent());
   }
 
   @override
-  /// Clean up resources when the widget is disposed
+  /// Limpia los recursos cuando el widget se destruye
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
 
   @override
-  /// Build the main screen layout
-  /// Includes search bar, category filters, and content list
+  /// Construye el diseño principal de la pantalla
+  /// Incluye barra de búsqueda, filtros de categoría y lista de contenido
   Widget build(BuildContext context) {
     return GestureDetector(
-      // Dismiss keyboard when tapping outside search field
+      // Oculta el teclado al tocar fuera del campo de búsqueda
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         body: Container(
-          // Background gradient for visual appeal
+          // Gradiente de fondo para apariencia visual
           decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
@@ -62,15 +62,15 @@ class _MovieListScreenState extends State<MovieListScreen> {
               ],
             ),
           ),
-          // Main content with padding
+          // Contenido principal con padding
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
               children: [
-                _buildSearchBar(),  // Search input field
-                _buildCategoryChips(),  // Category filter chips
-                const SizedBox(height: 8),  // Spacing
-                _buildContentList(),  // Main content list
+                _buildSearchBar(),  // Campo de entrada de búsqueda
+                _buildCategoryChips(),  // Chips de filtro de categoría
+                const SizedBox(height: 8),  // Espaciado
+                _buildContentList(),  // Lista de contenido principal
               ],
             ),
           ),
@@ -79,13 +79,13 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  /// Builds the search bar widget with clear button
-  /// Handles search input and updates the view model
+  /// Construye el widget de barra de búsqueda con botón de limpiar
+  /// Maneja la entrada de búsqueda y actualiza el modelo de vista
   Widget _buildSearchBar() {
     return Padding(
       padding: const EdgeInsets.fromLTRB(16.0, 40.0, 16.0, 16.0),
       child: Container(
-        // Search bar container styling
+        // Estilo del contenedor de la barra de búsqueda
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           borderRadius: BorderRadius.circular(15),
@@ -97,21 +97,21 @@ class _MovieListScreenState extends State<MovieListScreen> {
             ),
           ],
         ),
-        // Search text field
+        // Campo de texto de búsqueda
         child: TextField(
           controller: _searchController,
           style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
-            hintText: 'Search...',  // Placeholder text
+            hintText: 'Buscar...',  // Texto de placeholder
             hintStyle: TextStyle(color: Colors.grey.shade400),
-            prefixIcon: Icon(Icons.search, color: Colors.grey.shade400),  // Search icon
+            prefixIcon: Icon(Icons.search, color: Colors.grey.shade400),  // Icono de búsqueda
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(15),
               borderSide: BorderSide.none,
             ),
             filled: true,
             fillColor: Colors.transparent,
-            // Clear search button
+            // Botón de limpiar búsqueda
             suffixIcon: IconButton(
               icon: Icon(Icons.clear, color: Colors.grey.shade400),
               onPressed: () {
@@ -120,7 +120,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
               },
             ),
           ),
-          // Update search results as user types
+          // Actualiza los resultados de búsqueda mientras el usuario escribe
           onChanged: (value) {
             context.read<MovieViewModel>().searchContent(value);
           },
@@ -129,8 +129,8 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  /// Builds the horizontal scrollable category filter chips
-  /// Allows switching between Movies, TV Shows, and Reviews
+  /// Construye los chips de filtro de categoría desplazables horizontalmente
+  /// Permite cambiar entre Películas, Series de TV y Reseñas
   Widget _buildCategoryChips() {
     return Consumer<MovieViewModel>(
       builder: (context, movieViewModel, child) {
@@ -146,7 +146,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
               _buildCategoryChip('Series', ContentType.tvShows, movieViewModel.selectedType),
               const SizedBox(width: 8),
               // Reviews category chip
-              _buildCategoryChip('Reviews', ContentType.reviews, movieViewModel.selectedType),
+              _buildCategoryChip('Reseñas', ContentType.reviews, movieViewModel.selectedType),
             ],
           ),
         );
@@ -188,8 +188,8 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  /// Builds the main content list (movies, TV shows, or reviews)
-  /// Handles loading states, errors, and empty states
+  /// Construye la lista principal de contenido (películas, series de TV o reseñas)
+  /// Maneja estados de carga, errores y estados vacíos
   Widget _buildContentList() {
     return Expanded(
       child: Consumer<MovieViewModel>(
@@ -252,7 +252,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  /// Builds a message shown when no content is available
+  /// Construye un mensaje que se muestra cuando no hay contenido disponible
   Widget _buildEmptyMessage(String message) {
     return Center(
       child: Column(
@@ -269,7 +269,7 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  /// Builds the list of reviews
+  /// Construye la lista de reseñas
   Widget _buildReviewList(MovieViewModel movieViewModel) {
     return ListView.builder(
       itemCount: movieViewModel.reviews.length,
@@ -279,8 +279,8 @@ class _MovieListScreenState extends State<MovieListScreen> {
     );
   }
 
-  /// Builds the list of movies or TV shows
-  /// Includes infinite scrolling and pull-to-refresh functionality
+  /// Construye la lista de películas o series de TV
+  /// Incluye desplazamiento infinito y funcionalidad de actualización mediante arrastre
   Widget _buildMovieList(MovieViewModel movieViewModel) {
     return Column(
       children: [

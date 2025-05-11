@@ -3,52 +3,52 @@ import '../models/movie.dart';
 import '../models/review.dart';
 import '../services/movie_service.dart';
 
-/// Enum defining the types of content that can be displayed
-/// Used to switch between different content views
+/// Enum que define los tipos de contenido que pueden mostrarse
+/// Se utiliza para cambiar entre diferentes vistas de contenido
 enum ContentType { movies, tvShows, reviews }
 
-/// ViewModel class that manages the state and business logic for the movie app
-/// Handles:
-/// - Content loading and pagination
-/// - Search functionality
-/// - Content type switching
-/// - Error handling
-/// - State management using ChangeNotifier
+/// Clase ViewModel que gestiona el estado y la lógica de negocio para la aplicación de películas
+/// Maneja:
+/// - Carga de contenido y paginación
+/// - Funcionalidad de búsqueda
+/// - Cambio de tipo de contenido
+/// - Manejo de errores
+/// - Gestión de estado usando ChangeNotifier
 class MovieViewModel extends ChangeNotifier {
-  /// Service for making API calls to fetch movie data
+  /// Servicio para realizar llamadas a la API y obtener datos de películas
   final MovieService _movieService = MovieService();
 
-  /// Internal storage for all movies/shows
+  /// Almacenamiento interno para todas las películas/series
   List<Movie> _movies = [];
   
-  /// Filtered list of movies/shows based on search
+  /// Lista filtrada de películas/series basada en la búsqueda
   List<Movie> _filteredMovies = [];
   
-  /// Internal storage for all reviews
+  /// Almacenamiento interno para todas las reseñas
   List<Review> _reviews = [];
   
-  /// Filtered list of reviews based on search
+  /// Lista filtrada de reseñas basada en la búsqueda
   List<Review> _filteredReviews = [];
   
-  /// Loading state indicator
+  /// Indicador de estado de carga
   bool _isLoading = false;
   
-  /// Error message storage
+  /// Almacenamiento de mensajes de error
   String _error = '';
   
-  /// Currently selected content type
+  /// Tipo de contenido actualmente seleccionado
   ContentType _selectedType = ContentType.movies;
   
-  /// Current page number for pagination
+  /// Número de página actual para paginación
   int _currentPage = 1;
   
-  /// Total number of available pages
+  /// Número total de páginas disponibles
   int _totalPages = 1;
   
-  /// Flag indicating if more content is available to load
+  /// Indicador de si hay más contenido disponible para cargar
   bool _hasMoreContent = true;
 
-  // Getters for public access to private fields
+  // Getters para acceso público a campos privados
   List<Movie> get movies => _filteredMovies;
   List<Review> get reviews => _filteredReviews;
   bool get isLoading => _isLoading;
@@ -56,8 +56,8 @@ class MovieViewModel extends ChangeNotifier {
   ContentType get selectedType => _selectedType;
   bool get hasMoreContent => _hasMoreContent;
 
-  /// Sample review data for demonstration purposes
-  /// In a real app, this would come from a backend service
+  /// Datos de ejemplo de reseñas para fines de demostración
+  /// En una aplicación real, esto vendría de un servicio backend
   final List<Review> _allSampleReviews = [
     Review(author: 'Juan Pérez', content: '¡Excelente película! Me encantó la trama y los efectos especiales.', rating: 4.5, createdAt: '2024-03-15'),
     Review(author: 'María García', content: 'Buena actuación pero el guión podría ser mejor.', rating: 3.0, createdAt: '2024-03-14'),
@@ -71,8 +71,8 @@ class MovieViewModel extends ChangeNotifier {
     Review(author: 'Carmen Vega', content: 'La banda sonora es increíble, complementa perfectamente la historia.', rating: 4.0, createdAt: '2024-03-06'),
   ];
 
-  /// Formats error messages for display
-  /// Logs errors in debug mode
+  /// Formatea los mensajes de error para su visualización
+  /// Registra errores en modo debug
   String _getErrorMessage(Object e) {
     if (kDebugMode) {
       print('Error: $e');
@@ -80,14 +80,14 @@ class MovieViewModel extends ChangeNotifier {
     return 'Error al cargar los datos. Verifica tu conexión o intenta nuevamente.';
   }
 
-  /// Clears any existing error message
+  /// Limpia cualquier mensaje de error existente
   void clearError() {
     _error = '';
     notifyListeners();
   }
 
-  /// Loads initial content based on selected type
-  /// Resets pagination and handles errors
+  /// Carga el contenido inicial según el tipo seleccionado
+  /// Reinicia la paginación y maneja errores
   Future<void> loadContent() async {
     _isLoading = true;
     _error = '';
@@ -127,8 +127,8 @@ class MovieViewModel extends ChangeNotifier {
     }
   }
 
-  /// Loads additional content for infinite scrolling
-  /// Handles pagination and error states
+  /// Carga contenido adicional para el desplazamiento infinito
+  /// Maneja la paginación y los estados de error
   Future<void> loadMoreContent() async {
     if (!_hasMoreContent || _isLoading) return;
 
@@ -173,8 +173,8 @@ class MovieViewModel extends ChangeNotifier {
     }
   }
 
-  /// Changes the content type and reloads content
-  /// Only triggers reload if type actually changes
+  /// Cambia el tipo de contenido y recarga el contenido
+  /// Solo activa la recarga si el tipo realmente cambia
   void setContentType(ContentType type) {
     if (_selectedType != type) {
       _selectedType = type;
@@ -182,8 +182,8 @@ class MovieViewModel extends ChangeNotifier {
     }
   }
 
-  /// Searches content based on query string
-  /// Handles different content types and search states
+  /// Busca contenido basado en la cadena de consulta
+  /// Maneja diferentes tipos de contenido y estados de búsqueda
   Future<void> searchContent(String query) async {
     if (query.isEmpty) {
       // Reset to full list if search is cleared

@@ -21,30 +21,50 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override
-  // Método build que define la interfaz de usuario de la aplicación
+  // Método que construye la interfaz de usuario de la aplicación
   Widget build(BuildContext context) {
-    // Envolvemos la aplicación con ChangeNotifierProvider para manejar el estado
     return ChangeNotifierProvider(
-      // Creamos una instancia de MovieViewModel para gestionar el estado de las películas
-      create: (context) => MovieViewModel(),
+      // Proporciona el ViewModel a toda la aplicación
+      create: (_) => MovieViewModel(),
       child: MaterialApp(
-        title: 'Movie App',  // Título de la aplicación
-        debugShowCheckedModeBanner: false,  // Oculta la etiqueta de debug
-        // Configuración del tema de la aplicación
-        theme: ThemeData(
-          primarySwatch: Colors.blue,  // Color primario de la aplicación
-          useMaterial3: true,  // Habilita Material Design 3
-          scaffoldBackgroundColor: const Color(0xFF1A1A1A),  // Color de fondo principal
-          // Configuración del esquema de colores oscuro
+        // Configuración del tema oscuro para la aplicación
+        theme: ThemeData.dark().copyWith(
+          // Personalización de los colores del tema
           colorScheme: ColorScheme.dark(
-            primary: Colors.blue.shade400,  // Color primario
-            secondary: Colors.blue.shade200,  // Color secundario
-            surface: const Color(0xFF2A2A2A),  // Color de superficie
-            background: const Color(0xFF1A1A1A),  // Color de fondo
+            // Color de fondo principal
+            background: const Color(0xFF1A1A1A),
+            // Color de superficie para tarjetas y contenedores
+            surface: const Color(0xFF2D2D2D),
+            // Color primario para elementos destacados
+            primary: Colors.blue.shade400,
+            // Color secundario para elementos de acento
+            secondary: Colors.blue.shade200,
+          ),
+          // Estilo de texto predeterminado
+          textTheme: const TextTheme(
+            // Estilo para títulos grandes
+            headlineLarge: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            // Estilo para títulos medianos
+            headlineMedium: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+            ),
+            // Estilo para texto del cuerpo
+            bodyLarge: TextStyle(
+              fontSize: 16,
+              color: Colors.white,
+            ),
           ),
         ),
-        // Define la pantalla inicial de la aplicación
+        // Pantalla inicial de la aplicación
         home: const MovieListScreen(),
+        // Desactiva el banner de debug
+        debugShowCheckedModeBanner: false,
       ),
     );
   }
